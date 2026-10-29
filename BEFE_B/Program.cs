@@ -1,4 +1,6 @@
 
+using BEFE_B.Data;
+
 namespace BEFE_B
 {
     public class Program
@@ -8,6 +10,10 @@ namespace BEFE_B
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+            builder.Services.AddDbContext<BookDbContext>(opt =>
+            {
+                
+            });
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
