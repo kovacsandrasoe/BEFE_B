@@ -1,4 +1,5 @@
 ﻿using BEFE_B.Data;
+using BEFE_B.Dtos.Author;
 using BEFE_B.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -23,8 +24,12 @@ namespace BEFE_B.Controllers
         }
 
         [HttpPost]
-        public void CreateAuthor([FromBody] Author a)
+        public void CreateAuthor([FromBody] AuthorCreateUpdateDto dto)
         {
+            var a = new Author();
+            a.Name = dto.Name;
+            a.BirthDate = dto.BirthDate;
+
             _ctx.Authors.Add(a);
             _ctx.SaveChanges();
         }
