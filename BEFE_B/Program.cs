@@ -1,5 +1,6 @@
 
 using BEFE_B.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace BEFE_B
 {
@@ -12,7 +13,7 @@ namespace BEFE_B
             // Add services to the container.
             builder.Services.AddDbContext<BookDbContext>(opt =>
             {
-                
+                opt.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=BookDb;Trusted_Connection=True;TrustServerCertificate=True;MultipleActiveResultSets=True");
             });
 
             builder.Services.AddControllers();
