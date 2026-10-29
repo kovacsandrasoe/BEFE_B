@@ -1,5 +1,6 @@
 
 using BEFE_B.Data;
+using BEFE_B.Tools;
 using Microsoft.EntityFrameworkCore;
 
 namespace BEFE_B
@@ -9,6 +10,11 @@ namespace BEFE_B
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            builder.Services.AddAutoMapper(cfg =>
+            {
+
+            }, typeof(DtoProfile));
 
             // Add services to the container.
             builder.Services.AddDbContext<BookDbContext>(opt =>

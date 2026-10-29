@@ -1,4 +1,5 @@
-﻿using BEFE_B.Data;
+﻿using AutoMapper;
+using BEFE_B.Data;
 using BEFE_B.Dtos.Author;
 using BEFE_B.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -11,32 +12,24 @@ namespace BEFE_B.Controllers
     public class AuthorController : ControllerBase
     {
         private readonly BookDbContext _ctx;
+        private readonly IMapper _mapper;
 
-        public AuthorController(BookDbContext ctx)
+        public AuthorController(BookDbContext ctx, IMapper mapper)
         {
             _ctx = ctx;
+            _mapper = mapper;
         }
 
         [HttpGet]
         public IEnumerable<AuthorViewDto> GetAuthors()
         {
-            return _ctx.Authors.Select(z => new AuthorViewDto()
-            {
-                Id = z.Id,
-                Name = z.Name,
-                BirthDate = z.BirthDate,
-                TitleOfBooks = z.Books != null ? z.Books.Select(y => y.Title).ToList() : new List<string>()
-            });
+            return _ctx.Authors.Select(z => _mapper.Map<AuthorViewDto>(z));
         }
 
         [HttpPost]
         public void CreateAuthor([FromBody] AuthorCreateUpdateDto dto)
         {
-            var a = new Author();
-            a.Name = dto.Name;
-            a.BirthDate = dto.BirthDate;
-
-            _ctx.Authors.Add(a);
+            _ctx.Authors.Add(_mapper.Map<Author>(dto));
             _ctx.SaveChanges();
         }
     }

@@ -9,7 +9,12 @@ namespace BEFE_B.Tools
         public DtoProfile() 
         {
             CreateMap<AuthorCreateUpdateDto, Author>();
-            CreateMap<Author, AuthorViewDto>();
+
+            CreateMap<Author, AuthorViewDto>()
+                .AfterMap((model, dto) =>
+                {
+                    dto.TitleOfBooks = model.Books != null ? model.Books.Select(z => z.Title).ToList() : new List<string>();
+                });
         }
     }
 }
