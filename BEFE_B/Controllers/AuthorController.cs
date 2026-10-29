@@ -18,9 +18,15 @@ namespace BEFE_B.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Author> GetAuthors()
+        public IEnumerable<AuthorViewDto> GetAuthors()
         {
-            return _ctx.Authors;
+            return _ctx.Authors.Select(z => new AuthorViewDto()
+            {
+                Id = z.Id,
+                Name = z.Name,
+                BirthDate = z.BirthDate,
+                TitleOfBooks = z.Books != null ? z.Books.Select(y => y.Title).ToList() : new List<string>()
+            });
         }
 
         [HttpPost]
