@@ -9,7 +9,7 @@ namespace BEFE_B.Data
 
         public BookDbContext(DbContextOptions<BookDbContext> opt) : base(opt)
         {
-            
+            Database.EnsureCreated();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using BEFE_B.Models;
+﻿using BEFE_B.Data;
+using BEFE_B.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BEFE_B.Controllers
@@ -7,18 +8,24 @@ namespace BEFE_B.Controllers
     [Route("[controller]")]
     public class BookController : ControllerBase
     {
-        static List<Book> books = new List<Book>();
+        private readonly BookDbContext _ctx;
+
+        public BookController(BookDbContext ctx)
+        {
+            _ctx = ctx;
+        }
 
         [HttpGet]
-        public List<Book> GetBooks()
+        public IEnumerable<Book> GetBooks()
         {
-            return books;
+            return _ctx.Books;
         }
 
         [HttpPost]
         public void CreateBook([FromBody] Book b)
         {
-            books.Add(b);
+            _ctx.Books.Add(b);
+            _ctx.SaveChanges();
         }
     }
 }
