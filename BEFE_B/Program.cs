@@ -13,7 +13,9 @@ namespace BEFE_B
             // Add services to the container.
             builder.Services.AddDbContext<BookDbContext>(opt =>
             {
-                opt.UseSqlServer(builder.Configuration["db:conn_string"]);
+                opt
+                .UseSqlServer(builder.Configuration["db:conn_string"])
+                .UseLazyLoadingProxies();
             });
 
             builder.Services.AddControllers();

@@ -1,6 +1,7 @@
 ﻿using BEFE_B.Data;
 using BEFE_B.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BEFE_B.Controllers
 {

@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace BEFE_B.Models
 {
@@ -15,5 +16,9 @@ namespace BEFE_B.Models
         public int Year { get; set; }
 
         public Guid AuthorId { get; set; }
+        
+        [NotMapped]
+        [JsonIgnore]
+        public virtual Author? Author { get; set; }
     }
 }
