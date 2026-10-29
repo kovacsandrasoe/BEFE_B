@@ -13,7 +13,7 @@ namespace BEFE_B
             // Add services to the container.
             builder.Services.AddDbContext<BookDbContext>(opt =>
             {
-                opt.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=BookDb;Trusted_Connection=True;TrustServerCertificate=True;MultipleActiveResultSets=True");
+                opt.UseSqlServer(builder.Configuration["db:conn_string"]);
             });
 
             builder.Services.AddControllers();
