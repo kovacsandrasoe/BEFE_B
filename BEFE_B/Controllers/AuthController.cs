@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace BEFE_B.Controllers
@@ -78,8 +79,29 @@ namespace BEFE_B.Controllers
             }
 
             var accessToken = GenerateAccessToken(claim);
-            return Ok(new JwtSecurityTokenHandler().WriteToken(accessToken));
+            var refreshToken = await GenerateRefreshToken(user);
+
+            return Ok(new
+            {
+                AccessToken = new JwtSecurityTokenHandler().WriteToken(accessToken),
+                AccessTokenExpiration = DateTime.Now.AddMinutes(Convert.ToInt32(_configuration["jwt:access_expiry_minutes"])),
+                RefreshToken = refreshToken,
+                RefreshTokenExpiration = DateTime.Now.AddDays(Convert.ToInt32(_configuration["jwt:refresh_expiry_days"]))
+            });
                 
+        }
+
+        private async Task<string> GenerateRefreshToken(AppUser user)
+        {
+            var randomNumber = new byte[32];
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                rng.GetBytes(randomNumber);
+                string result = Convert.ToBase64String(randomNumber);
+                user.RefreshToken = result;
+                await _userManager.UpdateAsync(user);
+                return result;
+            }
         }
 
         private JwtSecurityToken GenerateAccessToken(IEnumerable<Claim>? claims)
