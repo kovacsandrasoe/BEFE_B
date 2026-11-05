@@ -17,16 +17,35 @@ namespace BEFE_B.Controllers
         private readonly BookDbContext _ctx;
         private readonly IMapper _mapper;
         private UserManager<IdentityUser> _userManager;
+        private RoleManager<IdentityRole> _roleManager;
         private IConfiguration _configuration;
 
-        public AuthController(BookDbContext ctx, IMapper mapper, UserManager<IdentityUser> userManager, IConfiguration configuration)
+        public AuthController(BookDbContext ctx, IMapper mapper, UserManager<IdentityUser> userManager, IConfiguration configuration, RoleManager<IdentityRole> roleManager)
         {
             _ctx = ctx;
             _mapper = mapper;
             _userManager = userManager;
             _configuration = configuration;
+            _roleManager = roleManager;
         }
 
+        [HttpPost("register")]
+        public async Task Register(UserCreateDto dto)
+        {
+            var user = new IdentityUser
+            {
+                UserName = dto.Email,
+                Email = dto.Email,
+                EmailConfirmed = true,
+            };
+            await _userManager.CreateAsync(user, dto.Password);
+
+            if (_userManager.Users.Count() == 1)
+            {
+                await _roleManager.CreateAsync(new IdentityRole("Admin"));
+                await _userManager.AddToRoleAsync(user, "Admin");
+            }
+        }
 
 
         [HttpPost]
