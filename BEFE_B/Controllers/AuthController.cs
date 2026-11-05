@@ -115,7 +115,7 @@ namespace BEFE_B.Controllers
             {
                 AccessToken = new JwtSecurityTokenHandler().WriteToken(newAccessToken),
                 RefreshToken = newRefreshToken,
-                AccessTokenExpiration = newAccessToken.ValidTo,
+                AccessTokenExpiration = DateTime.Now.AddMinutes(Convert.ToInt32(_configuration["jwt:access_expiry_minutes"])),
                 RefreshTokenExpiration = DateTime.Now.AddMinutes(24 * 60 * Convert.ToInt32(_configuration["jwt:refresh_expiry_days"]))
             });
         }
