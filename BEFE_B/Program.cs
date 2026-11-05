@@ -1,5 +1,6 @@
 
 using BEFE_B.Data;
+using BEFE_B.Models;
 using BEFE_B.Tools;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -30,7 +31,7 @@ namespace BEFE_B
                 .UseLazyLoadingProxies();
             });
 
-            builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+            builder.Services.AddIdentity<AppUser, IdentityRole>()
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<BookDbContext>()
                 .AddDefaultTokenProviders();

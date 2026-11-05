@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BEFE_B.Data
 {
-    public class BookDbContext : IdentityDbContext
+    public class BookDbContext : IdentityDbContext<AppUser>
     {
         public DbSet<Book> Books { get; set; }
         public DbSet<Author> Authors { get; set; }

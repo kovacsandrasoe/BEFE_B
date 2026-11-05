@@ -12,9 +12,9 @@ namespace BEFE_B.Controllers
     public class BookController : ControllerBase
     {
         private readonly BookDbContext _ctx;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<AppUser> _userManager;
 
-        public BookController(BookDbContext ctx, UserManager<IdentityUser> userManager)
+        public BookController(BookDbContext ctx, UserManager<AppUser> userManager)
         {
             _ctx = ctx;
             _userManager = userManager;

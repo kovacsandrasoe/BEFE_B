@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BEFE_B.Data;
 using BEFE_B.Dtos.Auth;
+using BEFE_B.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -16,11 +17,11 @@ namespace BEFE_B.Controllers
     {
         private readonly BookDbContext _ctx;
         private readonly IMapper _mapper;
-        private UserManager<IdentityUser> _userManager;
+        private UserManager<AppUser> _userManager;
         private RoleManager<IdentityRole> _roleManager;
         private IConfiguration _configuration;
 
-        public AuthController(BookDbContext ctx, IMapper mapper, UserManager<IdentityUser> userManager, IConfiguration configuration, RoleManager<IdentityRole> roleManager)
+        public AuthController(BookDbContext ctx, IMapper mapper, UserManager<AppUser> userManager, IConfiguration configuration, RoleManager<IdentityRole> roleManager)
         {
             _ctx = ctx;
             _mapper = mapper;
@@ -32,10 +33,13 @@ namespace BEFE_B.Controllers
         [HttpPost("register")]
         public async Task Register(UserCreateDto dto)
         {
-            var user = new IdentityUser
+            var user = new AppUser
             {
                 UserName = dto.Email,
                 Email = dto.Email,
+                FamilyName = dto.FamilyName,
+                GivenName = dto.GivenName,
+                RefreshToken = string.Empty,
                 EmailConfirmed = true,
             };
             await _userManager.CreateAsync(user, dto.Password);
