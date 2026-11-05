@@ -48,7 +48,7 @@ namespace BEFE_B.Controllers
         }
 
 
-        [HttpPost]
+        [HttpPost("login")]
         public async Task<ActionResult> Login([FromBody] LoginDto dto)
         {
             var user = await _userManager.FindByEmailAsync(dto.Email);
