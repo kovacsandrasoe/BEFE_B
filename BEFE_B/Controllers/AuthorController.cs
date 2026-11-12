@@ -2,6 +2,7 @@
 using BEFE_B.Data;
 using BEFE_B.Dtos.Author;
 using BEFE_B.Models;
+using Hangfire;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -39,6 +40,22 @@ namespace BEFE_B.Controllers
             var old = _ctx.Authors.Find(id);
             _mapper.Map(dto, old);
             await _ctx.SaveChangesAsync();
+            if (old != null)
+            {
+                BackgroundJob.Schedule(() => UpdateName(old), TimeSpan.FromSeconds(10));
+            }
+
+            //hangfire lehetőségek
+            //aszinkron job: BackgroundService.Enqueue(job)
+            //késleltetett job: BackgroundJob.Schedule(job, mikor)
+            //ismétlődő job: RecurringJob.AddOrUpdate(job, cron kifejezés)
+        }
+
+        [NonAction]
+        public void UpdateName(Author author)
+        {
+            author.Name = author.Name + "!";
+            _ctx.SaveChanges();
         }
 
         [HttpPost]
