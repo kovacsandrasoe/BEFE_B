@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 namespace BEFE_B.Tools
 {
     public record ErrorModel(string Message);
-
+    
     public class ExceptionFilter : IActionFilter
     {
         public void OnActionExecuted(ActionExecutedContext context)
