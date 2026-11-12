@@ -21,37 +21,39 @@ namespace BEFE_B.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<AuthorViewDto> GetAuthors()
+        public async Task<List<AuthorViewDto>> GetAuthors()
         {
-            return _ctx.Authors.Select(z => _mapper.Map<AuthorViewDto>(z));
+            return await 
+                _ctx.Authors.Select(z => _mapper.Map<AuthorViewDto>(z)).ToListAsync();
         }
 
         [HttpGet("{id}")]
-        public AuthorViewDto GetAuthor(Guid id) 
+        public async Task<AuthorViewDto> GetAuthor(Guid id) 
         {
-            return _mapper.Map<AuthorViewDto>(_ctx.Authors.Find(id));
+            return _mapper.Map<AuthorViewDto>(await _ctx.Authors.FindAsync(id));
         }
 
         [HttpPut("{id}")]
-        public void UpdateAuthor([FromBody] AuthorCreateUpdateDto dto, Guid id)
+        public async Task UpdateAuthor([FromBody] AuthorCreateUpdateDto dto, Guid id)
         {
             var old = _ctx.Authors.Find(id);
             _mapper.Map(dto, old);
+            await _ctx.SaveChangesAsync();
         }
 
         [HttpPost]
-        public void CreateAuthor([FromBody] AuthorCreateUpdateDto dto)
+        public async Task CreateAuthor([FromBody] AuthorCreateUpdateDto dto)
         {
             _ctx.Authors.Add(_mapper.Map<Author>(dto));
-            _ctx.SaveChanges();
+            await _ctx.SaveChangesAsync();
         }
 
         [HttpDelete("{id}")]
-        public void DeleteAuthor(Guid id)
+        public async Task DeleteAuthor(Guid id)
         {
             var authorToDelete = _ctx.Authors.First(t => t.Id == id);
             _ctx.Authors.Remove(authorToDelete);
-            _ctx.SaveChanges();
+            await _ctx.SaveChangesAsync();
         }
     }
 }
