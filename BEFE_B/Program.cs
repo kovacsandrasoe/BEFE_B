@@ -115,6 +115,7 @@ namespace BEFE_B
                 app.UseSwaggerUI();
             }
 
+            app.UseStaticFiles();
 
             app.UseHttpsRedirection();
 
