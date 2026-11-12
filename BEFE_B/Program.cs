@@ -2,6 +2,7 @@
 using BEFE_B.Data;
 using BEFE_B.Models;
 using BEFE_B.Tools;
+using Hangfire;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -56,6 +57,12 @@ namespace BEFE_B
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["jwt:key"] ?? throw new Exception("jwt:key not defined in appsettings")))
                 };
             });
+
+            builder.Services.AddHangfire(config =>
+            {
+                config.UseSqlServerStorage(builder.Configuration["db:conn_string"]);
+            });
+            builder.Services.AddHangfireServer();
 
 
             builder.Services.AddControllers(cfg =>
@@ -121,6 +128,8 @@ namespace BEFE_B
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseHangfireDashboard();
 
 
             app.MapControllers();
