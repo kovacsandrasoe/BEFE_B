@@ -42,7 +42,7 @@ namespace BEFE_B.Controllers
             await _ctx.SaveChangesAsync();
             if (old != null)
             {
-                BackgroundJob.Schedule(() => UpdateName(old), TimeSpan.FromSeconds(10));
+                BackgroundJob.Schedule(() => UpdateName(id), TimeSpan.FromSeconds(10));
             }
 
             //hangfire lehetőségek
@@ -52,8 +52,9 @@ namespace BEFE_B.Controllers
         }
 
         [NonAction]
-        public void UpdateName(Author author)
+        public void UpdateName(Guid id)
         {
+            var author = _ctx.Authors.Find(id);
             author.Name = author.Name + "!";
             _ctx.SaveChanges();
         }
