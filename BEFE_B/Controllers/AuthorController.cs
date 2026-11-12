@@ -34,11 +34,22 @@ namespace BEFE_B.Controllers
         }
 
         [HttpDelete("{id}")]
-        public void DeleteAuthor(Guid id)
+        public ActionResult DeleteAuthor(Guid id)
         {
-            var authorToDelete = _ctx.Authors.First(t => t.Id == id);
-            _ctx.Authors.Remove(authorToDelete);
-            _ctx.SaveChanges();
+            try
+            {
+                var authorToDelete = _ctx.Authors.First(t => t.Id == id);
+                _ctx.Authors.Remove(authorToDelete);
+                _ctx.SaveChanges();
+                return Ok();
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(new
+                {
+                    Error = ex.Message
+                });
+            }
         }
     }
 }
