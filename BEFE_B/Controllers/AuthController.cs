@@ -2,6 +2,7 @@
 using BEFE_B.Data;
 using BEFE_B.Dtos.Auth;
 using BEFE_B.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -29,6 +30,16 @@ namespace BEFE_B.Controllers
             _userManager = userManager;
             _configuration = configuration;
             _roleManager = roleManager;
+        }
+
+        [HttpPost("upload-profile-picture")]
+        [DisableRequestSizeLimit]
+        [Authorize]
+        public async Task<IActionResult> UploadProfilePicture(IFormFile file)
+        {
+            using var stream = new MemoryStream();
+            await file.CopyToAsync(stream);
+            return Ok(stream.ToArray());
         }
 
         [HttpPost("register")]
