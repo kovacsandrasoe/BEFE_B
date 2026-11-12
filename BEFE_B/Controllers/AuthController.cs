@@ -37,9 +37,19 @@ namespace BEFE_B.Controllers
         [Authorize]
         public async Task<IActionResult> UploadProfilePicture(IFormFile file)
         {
-            using var stream = new MemoryStream();
+            /*using var stream = new MemoryStream();
             await file.CopyToAsync(stream);
-            return Ok(stream.ToArray());
+            return Ok(stream.ToArray());*/
+            var user = await _userManager.GetUserAsync(User);
+            var filePath = Path.Combine(
+                Directory.GetCurrentDirectory(), "wwwroot", "profilepictures", user.Id, file.Name.Split('.')[1]);
+
+            await using var stream = new FileStream(
+            filePath,
+            FileMode.Create);
+
+            await file.CopyToAsync(stream);
+            return Ok();
         }
 
         [HttpPost("register")]
