@@ -32,5 +32,13 @@ namespace BEFE_B.Controllers
             _ctx.Authors.Add(_mapper.Map<Author>(dto));
             _ctx.SaveChanges();
         }
+
+        [HttpDelete("{id}")]
+        public void DeleteAuthor(Guid id)
+        {
+            var authorToDelete = _ctx.Authors.First(t => t.Id == id);
+            _ctx.Authors.Remove(authorToDelete);
+            _ctx.SaveChanges();
+        }
     }
 }
