@@ -22,7 +22,7 @@ namespace BEFE_B.Tools
 
         public void OnActionExecuting(ActionExecutingContext context)
         {
-            throw new NotImplementedException();
+            
         }
     }
 }
